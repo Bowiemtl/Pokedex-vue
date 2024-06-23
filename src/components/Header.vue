@@ -1,13 +1,12 @@
 <template>
   <header class="w-full text-orange-600">
-    <div class="top">Pokédex V2 ULTIMATE REBUILD</div>
+    <div class="top w-full h-12">Pokédex V2</div>
     <!--bg-gradient-to-r from-white via-green-300 to-green-200 h-12 w-full-->
 
-    <nav class="flex justify-normal ">
+    <nav class="flex justify-normal border-b-black border">
       <RouterLink to="/" class="ml-0.5 mr-0.5"> Home</RouterLink>
       <RouterLink to="/about" class="ml-0.5 mr-0.5"> About</RouterLink>
     </nav>
-
   </header>
 </template>
 
@@ -18,6 +17,7 @@ import {RouterLink} from "vue-router";
 <style scoped lang="scss">
 
 $gradient-start: rgba(255, 255, 255, 1);
+$gradient-edge: rgba(213, 242, 228, 1);
 $gradient-mid: rgba(148, 230, 200, 1);
 $gradient-end: rgba(200, 255, 171, 1);
 
@@ -27,13 +27,15 @@ header {
   .top {
     background: linear-gradient(45deg,
         $gradient-start 0%,
-        $gradient-start 28%,
+        $gradient-start 27%,
+        $gradient-edge 27%,
+        $gradient-edge 28%,
         $gradient-mid 28%,
         $gradient-mid 58%,
         $gradient-end 80%
     );
-    height: 50px;
-    width: 100%;
+    //height: 50px;
+    //width: 100%;
   }
 
   nav {

@@ -2,36 +2,30 @@
   <div class="container mx-auto">
     <button @click="increment">+</button>
     <button @click="decrement">-</button>
-
-    <div class="grid grid-flow-col grid-rows-10">
+    <TransitionGroup name="tile-fade" tag="div" class="grid grid-flow-row grid-cols-10">
       <div v-for="(pokemon, i) in pokemonList" :key="pokemon.name">
-        <!--          <h1>{{ pokemon.name }}</h1>-->
-        <!--          <PokemonSprite :id="<number>i + 1 + (index*80)" :pokemon="pokemon"/>-->
-
-        <Transition name="card-fade" mode="in-out">
-          <PokemonCard :pokemon="pokemon" :i="i" :index="index"/>
+        <Transition name="tile-fade" mode="in-out">
+          <PokemonTile :pokemon="pokemon" :id="index * 50 + i + 1" :index="i" :i="i"/>
         </Transition>
       </div>
-    </div>
+    </TransitionGroup>
   </div>
 </template>
 
 <script lang="ts">
-import {ref, onMounted} from "vue";
-// import PokeAPI, {INamedApiResourceList, IPokemon} from "pokeapi-typescript";
-import PokemonSprite from "@/components/PokemonSprite.vue";
-import PokemonCard from "@/components/PokemonCard.vue";
+import {ref, onMounted, watch} from "vue";
+import PokemonTile from "@/components/PokemonTile.vue";
+
+let index2 = ref(0);
 
 export default {
-  components: {
-    PokemonCard,
-    PokemonSprite,
-  },
+  components: {PokemonTile},
   setup() {
     let index = ref(0);
+    let limit = ref(50);
     let category = ref('');
     let pokemonList = ref();
-    let currentURL = ref('https://pokeapi.co/api/v2/pokemon?limit=80&offset=0');
+    let currentURL = ref(`https://pokeapi.co/api/v2/pokemon?limit=${limit.value}&offset=${index.value * limit.value}`);
 
     const increment = () => {
       console.log(index.value, pokemonList.value.count);
@@ -41,8 +35,15 @@ export default {
 
     const decrement = () => {
       console.log(index.value, pokemonList.value.count);
-      if (index.value > 1) index.value -= 1;
+      index.value -= 1;
+      // if (index.value > 1)
     };
+
+    watch(index, async (newValue) => {
+      currentURL.value = `https://pokeapi.co/api/v2/pokemon?limit=${limit.value}&offset=${index.value * limit.value}`;
+      let pokemonResult = await fetch(currentURL.value).then((data) => data.json());
+      pokemonList.value = pokemonResult.results;
+    });
 
     onMounted(async () => {
       let pokemonResult = await fetch(currentURL.value).then((data) => data.json());
@@ -61,10 +62,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.card-fade-enter-active, .card-fade-leave-active {
-  transition: opacity 0.5s ease;
+.tile-fade-enter-active, .tile-fade-leave-active {
+  transition: opacity .5s ease;
 }
-.card-fade-enter, .card-fade-leave-to {
+
+.tile-fade-enter, .tile-fade-leave-to {
   opacity: 0;
 }
 </style>

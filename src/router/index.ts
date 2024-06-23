@@ -6,22 +6,30 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            name: 'Index',
+            name: "Index",
             component: IndexView
         },
         {
             path: '/pokemon/:id',
-            name: 'pokemon',
+            name: "pokemon",
             props: true,
             component: () => import('@/views/DetailView.vue'),
         },
         {
             path: '/404',
-            name: '404',
+            name: "404",
             component: () => import('@/views/NotFoundView.vue'),
-        }
-
+        },
+        {
+            path: '/about',
+            name: "about",
+            component: () => import('@/views/AboutView.vue'),
+        },
     ]
 })
+
+router.beforeEach((to, from) => {
+    document.title = <string> to.name ?? "Default Title";
+});
 
 export default router

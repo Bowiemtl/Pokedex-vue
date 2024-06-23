@@ -2,9 +2,9 @@
   <div>
     <h1> {{ pokemon?.name ?? "N/A" }}</h1>
     <canvas ref="canvas" width="400" height="400"></canvas>
-
-    <button @click="increment">+</button>
-    <button @click="decrement">-</button>
+    <img :src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`" alt="pokemon image">
+    <RouterLink :to="`/pokemon/${id-1}`">Previous</RouterLink>
+    <RouterLink :to="`/pokemon/${id+1}`">Next</RouterLink>
   </div>
 </template>
 
@@ -67,7 +67,7 @@ export default {
       this.loadPokemon();
     },
   },
-
+//define id as a number
 };
 </script>
 
